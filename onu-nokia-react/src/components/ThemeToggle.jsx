@@ -1,0 +1,61 @@
+import { useState } from 'react';
+import { useTheme } from '../hooks/useTheme';
+
+/**
+ * Componente para alternar entre temas dark e light com variantes
+ */
+function ThemeToggle() {
+    const { theme, setTheme } = useTheme();
+    const [showOptions, setShowOptions] = useState(false);
+
+    const themes = [
+        { id: 'fui', name: 'FUI Escuro', icon: '◐' },
+        { id: 'light-green', name: 'Verde Claro', icon: '◑' },
+        { id: 'dark', name: 'Padrão Escuro', icon: '◪' },
+        { id: 'dark-green', name: 'Verde Escuro', icon: '◕' },
+        { id: 'dark-purple', name: 'Roxo Escuro', icon: '◖' },
+        { id: 'dark-red', name: 'Vermelho Escuro', icon: '◗' }
+    ];
+
+    const currentTheme = themes.find(t => t.id === theme) || themes[0];
+
+    const handleThemeChange = (themeId) => {
+        setTheme(themeId);
+        setShowOptions(false);
+    };
+
+    return (
+        <div className="theme-selector">
+            <button
+                className="theme-toggle"
+                onClick={() => setShowOptions(!showOptions)}
+                title="Selecionar tema"
+                aria-label="Selecionar tema"
+            >
+                <span className="theme-toggle-icon">
+                    {currentTheme.icon}
+                </span>
+                <span className="theme-toggle-text">
+                    {currentTheme.name}
+                </span>
+            </button>
+            
+            {showOptions && (
+                <div className="theme-options">
+                    {themes.map((themeOption) => (
+                        <button
+                            key={themeOption.id}
+                            className={`theme-option ${theme === themeOption.id ? 'active' : ''}`}
+                            onClick={() => handleThemeChange(themeOption.id)}
+                        >
+                            <span className="theme-option-icon">{themeOption.icon}</span>
+                            <span className="theme-option-name">{themeOption.name}</span>
+                        </button>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
+export default ThemeToggle;
